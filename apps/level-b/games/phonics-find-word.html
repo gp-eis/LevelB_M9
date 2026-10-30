@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-US" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Language" content="en-US">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find the Word 🔍 — Level B Month 9</title>
+  <link rel="stylesheet" href="phonics-m7-core.css?v=20260908-1">
+  <link rel="stylesheet" href="../assets/navigation/gp-navigation.css?v=20260917-compact-pages">
+  
+  <style>
+    .game-toolbar { display:flex; justify-content:center; flex-wrap:wrap; gap:12px; margin-top:18px; }
+    .find-instruction-row { display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:22px; }
+    .find-instruction { margin:0; text-align:center; color:var(--text); font-size:clamp(1.35rem,4.5vw,2rem); font-weight:800; }
+    .target-chunk { display:inline-grid; place-items:center; min-width:64px; padding:4px 12px; border-radius:16px; background:linear-gradient(180deg,var(--yellow),var(--yellow-d)); color:var(--blue-d); box-shadow:0 4px 0 #c9a000; }
+    .target-listen { display:grid; place-items:center; width:52px; height:52px; border:none; border-radius:50%; background:linear-gradient(180deg,var(--blue),var(--blue-d)); box-shadow:0 5px 0 #1b7fae; color:var(--white); font-size:1.45rem; cursor:pointer; transition:transform .12s ease; }
+    .target-listen:hover { transform:scale(1.08); }
+    .target-listen:active { transform:translateY(2px); }
+    .target-listen:focus-visible { outline:4px solid var(--yellow); outline-offset:2px; }
+    .find-board { width:min(560px,100%); margin:20px auto 0; padding:clamp(18px,4vw,34px); border:8px solid #e86a5a; border-radius:28px; background:var(--white); box-shadow:0 10px 0 rgba(232,106,90,.2),0 16px 30px rgba(74,59,82,.1); }
+    .letter-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(12px,2.5vw,18px); }
+    .letter-btn { position:relative; min-height:78px; padding:12px 8px; border:4px solid #cae4f4; border-radius:20px; background:linear-gradient(180deg,#fff,#f4fbff); box-shadow:0 5px 0 #a9cfe7; color:#243a55; font-family:var(--font-literacy); font-size:clamp(1.45rem,5vw,2.15rem); font-weight:800; text-transform:lowercase; cursor:pointer; transition:transform .12s ease,border-color .15s ease,background .15s ease; }
+    .letter-btn:hover:not(:disabled) { transform:translateY(-3px) scale(1.025); }
+    .letter-btn:active:not(:disabled) { transform:translateY(2px); }
+    .letter-btn:focus-visible { outline:4px solid var(--yellow); outline-offset:3px; }
+    .letter-btn.circled { border-color:var(--green); background:#eaffdf; box-shadow:0 5px 0 var(--green-d); color:#245d18; animation:word-pop .38s cubic-bezier(.34,1.56,.64,1); }
+    .letter-btn.circled .matched-chunk { padding:0 .08em; border-radius:.25em; background:var(--yellow); color:var(--blue-d); }
+    .letter-btn.wrong { border-color:#d92332; background:#ffd9dd; box-shadow:0 5px 0 #a71925; color:#a71925; animation:wrong-shake .55s ease; }
+    .letter-btn.wrong::after { content:'✕'; position:absolute; top:-15px; right:-13px; display:grid; place-items:center; width:34px; height:34px; border:3px solid #fff; border-radius:50%; background:#e32e3d; color:#fff; font:900 1.25rem/1 var(--font-display); box-shadow:0 4px 0 #a71925; animation:word-pop .28s ease; }
+    .letter-btn:disabled { cursor:default; }
+    .status-text { margin-top:16px; min-height:1.5rem; text-align:center; font-size:1.15rem; font-weight:800; color:var(--purple-d); }
+    .success-modal { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:20px; background:rgba(30,58,95,.35); }
+    .success-modal[hidden] { display:none; }
+    .success-card { width:min(440px,100%); padding:28px 24px; border:7px solid var(--yellow); border-radius:30px; background:var(--white); box-shadow:0 14px 0 rgba(30,111,217,.2); text-align:center; animation:pop-in .45s cubic-bezier(.34,1.56,.64,1); }
+    .success-emoji { font-size:4rem; line-height:1; }
+    .success-title { margin:10px 0 8px; color:var(--pink-d); font-size:clamp(1.4rem,4.5vw,2rem); line-height:1.25; }
+    .success-copy { margin:0 0 18px; color:var(--blue-d); font-size:1.15rem; font-weight:800; }
+    @keyframes word-pop { from{transform:scale(.78)} to{transform:scale(1)} }
+    @keyframes pop-in { from{opacity:0;transform:scale(.6)} to{opacity:1;transform:scale(1)} }
+    @keyframes wrong-shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+    @media (max-width:520px) {
+      .find-board { padding:16px 12px; border-width:6px; }
+      .letter-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+      .letter-btn { min-height:66px; border-width:3px; border-radius:16px; }
+    }
+  </style>
+  <script src="phonics-week-data.js?v=nav-v4"></script>
+<script type="module" src="../assets/navigation/gp-sounds.js?v=20260916-b1"></script><link rel="stylesheet" href="../../shared/phonics/mobile.css?v=2"><script src="../activity-rewards.js"></script><script defer src="../../shared/phonics/rewards.js"></script><link rel="stylesheet" href="/LevelB_M9/apps/shared/category-icons/categories.css?v=6"></head>
+<body data-game-category="phonics">
+  <nav class="gp-navigation" aria-label="Lesson navigation"><div class="gp-navigation__links"><a class="gp-navigation__main" href="../index.html" aria-label="Main Home" title="Main Home"><span class="gp-navigation__icon" aria-hidden="true">🏠</span><span>Main Home</span></a><a class="gp-navigation__week" data-week-home href="../week-1.html#card-games" aria-label="Week Home" title="Week Home"><span class="gp-navigation__icon" aria-hidden="true">📅</span><span>Week Home</span></a><a class="gp-navigation__section" data-phonics-home href="phonics.html?week=1" aria-label="Back to games" title="Back to games"><span class="gp-navigation__icon" aria-hidden="true">←</span><span>Back</span></a></div></nav>
+
+  <div class="floaties" aria-hidden="true">
+    <span style="top:10%; left:4%;">🔍</span>
+    <span style="top:72%; left:92%;">🔤</span>
+  </div>
+
+  <div class="page">
+    
+
+    <header class="center" style="margin-top:16px;">
+      <h1 class="big-title page-title-with-icon" style="font-size:2.4rem;"><img class="page-title-icon" src="../assets/ui/game-list/phonics/find-letter-3d.png" alt="">Find the Word</h1>
+      <p class="subtitle" id="week-subtitle">Find the words with this week’s sound!</p>
+    </header>
+
+    <div class="game-toolbar">
+      <button class="pill-btn orange" id="new-board" type="button">🔄 New Board</button>
+    </div>
+
+    <div class="find-instruction-row">
+      <h2 class="find-instruction" id="find-instruction">Tap every word with <span class="target-chunk" id="target-chunk">ug</span></h2>
+      <button class="target-listen" id="target-listen" type="button" data-no-click-sound
+              aria-label="Hear the long-a pattern">🔊</button>
+    </div>
+
+    <section class="find-board" aria-label="Word finding board">
+      <div class="letter-grid" id="letter-grid"></div>
+    </section>
+
+    <p class="status-text" id="status-text" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="success-modal" id="success-modal" role="dialog" aria-modal="true"
+       aria-labelledby="success-title" hidden>
+    <div class="success-card">
+      <div class="success-emoji" aria-hidden="true">🎉</div>
+      <h2 class="success-title" id="success-title">You found every matching word!</h2>
+      <button class="pill-btn green" id="continue-btn" type="button">✓ Play Again</button>
+    </div>
+  </div>
+
+<script>
+configurePhonicsWeek();
+const grid=document.querySelector('#letter-grid'),status=document.querySelector('#status-text'),modal=document.querySelector('#success-modal');
+const words=PHONICS_WEEK.words, TARGET_COUNT=3;
+const families=PHONICS_WEEK.families;
+// Familiar non-target words keep this a family-recognition task without
+// teaching the later weeks' short-u families as Week 1 targets.
+const otherWords=['cat','dog','pen','hat','bed','fish'].map(word=>({id:word,word,family:word.slice(-2)}));
+let roundFamilies=PHONICS_WEEK.review?[...shuffle(families),...shuffle(families)]:families;
+let familyIndex=0,family=roundFamilies[0],found=0,locked=false,timer=0,revision=0;
+const progress=()=>`${PHONICS_WEEK.review?'Round '+(familyIndex+1)+' of 6 · ':''}Found ${found} / ${TARGET_COUNT}`;
+document.querySelector('#week-subtitle').textContent=PHONICS_WEEK.review?'Review the long-a words!':`Find the words with the Week ${PHONICS_WEEK.week} sound!`;
+function say(text){
+  if(!('speechSynthesis' in window))return;
+  speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang='en-US';utterance.rate=.85;speechSynthesis.speak(utterance);
+}
+function shuffle(list){
+  const out=[...list];
+  for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}
+  return out;
+}
+function startRound(){
+  revision++;clearTimeout(timer);
+  if('speechSynthesis' in window)speechSynthesis.cancel();
+  found=0;locked=false;modal.hidden=true;status.textContent=progress();
+  family=roundFamilies[familyIndex];
+  document.querySelector('#target-chunk').textContent=family;
+  document.querySelector('.find-board').setAttribute('aria-label','Find the words with '+family);
+  document.querySelector('#target-listen').setAttribute('aria-label','Hear the -'+family+' long-a pattern');
+  document.querySelector('#continue-btn').textContent=PHONICS_WEEK.review&&familyIndex<5?'Next Round →':'↻ Play Again';
+  grid.replaceChildren();
+  const targets=shuffle(words).slice(0,3);
+  const distractors=PHONICS_WEEK.review?words.filter(item=>item.family!==family):otherWords;
+  const deck=shuffle([...targets,...distractors]);
+  deck.forEach(item=>{
+    const button=document.createElement('button');
+    button.type='button';button.className='letter-btn';button.textContent=item.word;
+    button.dataset.word=item.id;button.setAttribute('aria-label','Choose '+item.word);
+    button.setAttribute('aria-pressed','false');
+    button.onclick=()=>{
+      if(locked||button.disabled)return;
+      say(item.word);
+      if(item.family!==family){
+        button.classList.remove('wrong');void button.offsetWidth;button.classList.add('wrong');
+        status.textContent='Look for words with -'+family+'.';
+        const token=revision;clearTimeout(button.wrongTimer);
+        button.wrongTimer=setTimeout(()=>{if(token===revision)button.classList.remove('wrong');},550);
+        return;
+      }
+      button.classList.add('circled');button.disabled=true;button.setAttribute('aria-pressed','true');
+      button.textContent=item.word;
+      found++;status.textContent=progress();
+      if(found===TARGET_COUNT){
+        locked=true;const token=revision;
+        timer=setTimeout(()=>{
+          if(token!==revision)return;
+          document.querySelector('#success-title').textContent=PHONICS_WEEK.review&&familyIndex===5?'All three word families reviewed!':'You found all the -'+family+' words!';
+          modal.hidden=false;document.querySelector('#continue-btn').focus();say('Great job!');
+        },500);
+      }
+    };
+    grid.append(button);
+  });
+}
+document.querySelector('#target-listen').onclick=()=>say(words.filter(item=>item.family===family).map(item=>item.word).join(', '));
+document.querySelector('#new-board').onclick=startRound;
+document.querySelector('#continue-btn').onclick=()=>{if(PHONICS_WEEK.review){familyIndex++;if(familyIndex===6){familyIndex=0;roundFamilies=[...shuffle(families),...shuffle(families)];}}startRound();};
+window.addEventListener('pagehide',()=>{revision++;clearTimeout(timer);});
+startRound();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+.fc-spot-stage {
+  background: #050b15;
+}
+
+.fc-spot-stage::after {
+  background: #050b15;
+}

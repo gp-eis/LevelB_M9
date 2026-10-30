@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Quicksand:wght@500;600;700&display=swap');
+:root{--pink:#ff6b6b;--pink-d:#d64545;--yellow:#ffd93d;--yellow-d:#d9a900;--blue:#3db5ff;--blue-d:#1e6fd9;--green:#7ed957;--green-d:#4ea62c;--orange:#ff9f1c;--orange-d:#c96b00;--teal:#2ec4b6;--ink:#1e3a5f;--font-display:"Comfortaa","Century Gothic","Trebuchet MS",sans-serif;--font-friendly:"Quicksand","Century Gothic","Trebuchet MS",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;overflow-x:hidden;font-family:var(--font-display);color:var(--ink);background:linear-gradient(180deg,#86d6ff 0%,#d9f7ff 52%,#eafff2 100%)}
+button{font:inherit}a,button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}h1,h2,strong{font-family:var(--font-display)}button:focus-visible,a:focus-visible{outline:3px solid #1677ce;outline-offset:3px}
+.memory-board.five-pairs{grid-template-columns:repeat(5,minmax(0,1fr));max-width:900px}
+@media(max-width:560px){.memory-board.five-pairs{gap:7px}.memory-board.five-pairs .memory-card{padding:4px;border-width:3px;border-radius:14px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}

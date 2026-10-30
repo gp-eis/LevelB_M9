@@ -1,0 +1,34 @@
+/* Picture-building dot-to-dot: coordinates are part of each illustration, not an overlay on a finished image. */
+(() => {
+ const pictures={
+ letters:{name:'bee',range:'A–H',points:[[145,265],[165,193],[230,165],[315,170],[385,206],[430,265],[370,335],[240,345]],
+ segments:['M145 265 Q138 225 165 193','M165 193 Q192 162 230 165','M230 165 Q270 148 315 170','M315 170 Q360 175 385 206','M385 206 Q420 230 430 265','M430 265 Q420 310 370 335','M370 335 Q310 360 240 345'],close:'M240 345 Q170 335 145 265',
+ art:`<g class="worksheet-details" stroke="#34434a" stroke-width="5" stroke-linejoin="round"><path d="M245 165 Q177 91 245 72 Q294 74 300 163 M303 163 Q315 70 367 86 Q410 120 337 176" fill="#f6feff"/><path class="reveal-detail" d="M145 265 Q138 225 165 193 Q192 162 230 165 Q270 148 315 170 Q360 175 385 206 Q420 230 430 265 Q420 310 370 335 Q310 360 240 345 Q170 335 145 265Z" fill="url(#helmet)" stroke="none"/><path d="M275 176 Q250 253 285 348 M340 187 Q317 265 340 343" fill="none" stroke-width="19"/><circle cx="198" cy="229" r="9" fill="#34434a"/><path d="M176 270 Q190 288 209 269 M169 193 L145 153 M197 171 L189 131" fill="none"/><circle cx="145" cy="153" r="6"/><circle cx="189" cy="131" r="6"/><path d="M220 340 l-15 30 M250 347 l-8 28 M285 351 v27 M320 351 l9 26 M355 341 l15 28 M380 327 l20 24" fill="none" stroke-width="4"/></g>`},
+ numbers:{name:'bird',range:'1–10',points:[[165,220],[175,147],[240,110],[305,140],[335,200],[415,235],[467,280],[405,346],[305,390],[205,340]],
+ segments:['M165 220 Q151 180 175 147','M175 147 Q200 104 240 110','M240 110 Q280 108 305 140','M305 140 Q330 164 335 200','M335 200 Q376 215 415 235','M415 235 L467 280','M467 280 L405 346','M405 346 Q363 385 305 390','M305 390 Q246 389 205 340'],close:'M205 340 Q166 298 165 220',
+ art:`<g class="worksheet-details" stroke="#34434a" stroke-width="5" stroke-linejoin="round"><path class="reveal-detail" d="M165 220 Q151 180 175 147 Q200 104 240 110 Q280 108 305 140 Q330 164 335 200 Q376 215 415 235 L467 280 L405 346 Q363 385 305 390 Q246 389 205 340 Q166 298 165 220Z" fill="url(#jersey)" stroke="none"/><path d="M165 200 L115 221 L165 239" fill="#ffc76c"/><circle cx="208" cy="180" r="11" fill="#34434a"/><circle cx="211" cy="177" r="3" fill="white" stroke="none"/><path d="M253 242 Q330 219 375 279 Q345 341 276 326 Q253 291 253 242" fill="#c5eaff"/><path d="M266 382 L258 425 L239 433 M258 425 L277 433 M327 386 L334 426 L315 434 M334 426 L353 433" fill="none"/></g>`}
+ };
+ window.Month9Dots={mount({stage,prompt,instruction,tone,feedback,complete,mode='letters',say=()=>{}}){
+  const spec=pictures[mode==='numbers'?'numbers':'letters'],numberMode=mode==='numbers',label=i=>numberMode?String(i+1):String.fromCharCode(65+i),total=spec.points.length;
+  const numberWords=['one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+  const spokenLabel=i=>numberMode?numberWords[i]:`Letter ${label(i)}`;
+  let count=0,done=false,timer,dragging=false;
+  const progress=document.getElementById('progress');progress.textContent=`0 / ${total}`;
+  prompt.textContent=`Finish the ${spec.name} picture!`;
+  instruction.textContent=`Join ${spec.range} in order. Tap the dots or slide to the next one.`;
+  stage.innerHTML=`<div class="picture-dots-game"><div class="picture-dots-heading"><span>✏️ Connect and discover</span><b>${spec.range}</b></div><div class="worksheet-area"><div class="picture-dots-board"><svg viewBox="0 0 600 500" aria-hidden="true"><defs><linearGradient id="helmet" x2=".8" y2="1"><stop stop-color="#ffec86"/><stop offset="1" stop-color="#e9af26"/></linearGradient><linearGradient id="jersey" x2=".8" y2="1"><stop stop-color="#8adbf8"/><stop offset="1" stop-color="#438fcb"/></linearGradient></defs><ellipse class="picture-shadow" cx="300" cy="${numberMode?460:410}" rx="180" ry="12" fill="#c5bdcb"/>${spec.art}<path class="picture-joined-line" fill="none" stroke="#34434a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>${spec.points.map(([x,y],i)=>`<button class="picture-dot ${i===0?'is-next':''}" data-dot="${i}" aria-label="Dot ${label(i)}" style="left:${x/6}%;top:${y/5}%"><span class="dot-label">${label(i)}</span><span class="dot-point"></span></button>`).join('')}</div></div><div class="picture-dots-hint" role="status">Start at <b>${label(0)}</b></div></div>`;
+  const board=stage.querySelector('.picture-dots-board'),line=stage.querySelector('.picture-joined-line'),hint=stage.querySelector('.picture-dots-hint');
+  function choose(b){if(!b)return;const i=Number(b.dataset.dot);if(done||i<count){say(spokenLabel(i));return;}
+   if(i!==count){say(`Find ${spokenLabel(count)} next.`);clearTimeout(timer);b.classList.add('try-again');hint.textContent=`Find ${label(count)} next.`;feedback(`Try ${label(count)}. Your picture is still here!`);timer=setTimeout(()=>b.classList.remove('try-again'),500);return;}
+   b.classList.remove('is-next');b.classList.add('is-joined');b.setAttribute('aria-label',`Dot ${label(i)}, connected`);count++;line.setAttribute('d',spec.segments.slice(0,count-1).join(' '));tone('good');progress.textContent=`${count} / ${total}`;
+   if(count===total){say(spokenLabel(i));done=true;line.setAttribute('d',spec.segments.join(' ')+' '+spec.close);board.classList.add('is-complete');hint.textContent=`You made a ${spec.name}!`;complete(b,`You connected the dots and made a ${spec.name}!`);}
+   else{say(numberMode?spokenLabel(i):`${spokenLabel(i)}. Find ${spokenLabel(count)} next.`);stage.querySelector(`[data-dot="${count}"]`).classList.add('is-next');hint.innerHTML=`Next: <b>${label(count)}</b>`;feedback(`${label(i)} joined. Find ${label(count)}!`);}
+  }
+  const down=e=>{if(e.button!==0)return;const b=e.target.closest('[data-dot]');if(!b)return;dragging=true;choose(b);board.setPointerCapture(e.pointerId);e.preventDefault();};
+  const move=e=>{if(!dragging||done)return;const b=stage.querySelector(`[data-dot="${count}"]`),r=b.getBoundingClientRect();if(e.clientX>=r.left-5&&e.clientX<=r.right+5&&e.clientY>=r.top-5&&e.clientY<=r.bottom+5)choose(b);};
+  const up=()=>{dragging=false;};
+  const click=e=>{if(e.detail===0)choose(e.target.closest('[data-dot]'));};
+  board.addEventListener('pointerdown',down);board.addEventListener('pointermove',move);board.addEventListener('pointerup',up);board.addEventListener('pointercancel',up);board.addEventListener('click',click);feedback(`Start with ${label(0)} to draw the missing outline.`);
+  return {dispose(){clearTimeout(timer);board.removeEventListener('pointerdown',down);board.removeEventListener('pointermove',move);board.removeEventListener('pointerup',up);board.removeEventListener('pointercancel',up);board.removeEventListener('click',click);}};
+ }};
+})();

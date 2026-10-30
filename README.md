@@ -1,6 +1,5 @@
-# GP Language · Level B · Month 9
+# GP Month 9 — LevelB_M9
 
-Reserved GitHub Pages URL: https://gp-eis.github.io/LevelB_M9/
+Current learner site, published to GitHub Pages with large video assets on Cloudflare R2.
 
-This repository contains only a Coming soon holding page.
-The unfinished Month 9 project and its media are not published here.
+GP English: https://www.gpeisenglish.com/copy-of-level-a-weekly-08
